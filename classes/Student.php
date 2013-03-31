@@ -1,16 +1,13 @@
 <?php
 
 class Student {
-	$id;
-	$name;
-	$enroll_year;
-	$enroll_quarter;
-	$dropout;
-	$gpa;
-	$units;
-	$type;
-	$classes_enrolled;
-	$classes_completed;
+	public $id;
+	public $name;
+	public $enroll_year;
+	public $enroll_quarter;
+	public $dropout;
+	public $gpa;
+	public $units;
 }
 
 ?>

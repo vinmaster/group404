@@ -2,12 +2,6 @@
 
 header('Content-Type: application/json');
 
-// Auto load the classes needed
-function __autoload($classname) {
-    $filename = "../classes/". $classname .".php";
-    include_once($filename);
-}
-
 if (isset($_POST['request'])) {//isset($_POST['login']) AND 
 	//Make sure not anyone can access this
 	if (!true){//Auth::isLoggedIn()) {
@@ -22,56 +16,24 @@ if (isset($_POST['request'])) {//isset($_POST['login']) AND
 				$year = $_POST['year'];
 				$quarter = $_POST['quarter'];
 
-				$db = MyPDO::getDb();
-
-				// Query string
-				$str = "SELECT * FROM curriculum ";
-				$str .= "WHERE year=:year ";
-				$str .= "AND quarter=:quarter";
-				$query = $db->prepare($str);
-				$query->bindParam(':year', $year);
-				$query->bindParam(':quarter', $quarter);
-				$query->execute();
-
-				if ($query->rowCount() === 0) {
+				include_once('../classes/CurriculumList.php');
+				$curriculumTable = new CurriculumList($year, $quarter);
+				if (!$curriculumTable->isEmpty()) {
+					$data = $curriculumTable->toJSON();
+				} else {
 					header('HTTP/1.0 400 Bad Request');
 				}
 
-				$data = array();
-				while ($result = $query->fetch()) {
-					$row = array();
-					foreach ($result as $key => $value) {
-						$row[$key] = $value;
-					}
-					array_push($data, $row);
-				}
-
-				echo json_encode($data);
+				echo $data;
 			} else {
 				header('HTTP/1.0 400 Bad Request');
 			}
 		} else if ($request === 'student') {
-			$db = MyPDO::getDb();
+			include('../classes/StudentList.php');
+			$studentTable = new StudentList();
+			$data = $studentTable->toJSON();
 
-			// Query string
-			$str = "SELECT * FROM student ";
-			$query = $db->prepare($str);
-			$query->execute();
-
-			if ($query->rowCount() === 0) {
-				header('HTTP/1.0 400 Bad Request');
-			}
-
-			$data = array();
-			while ($result = $query->fetch()) {
-				$row = array();
-				foreach ($result as $key => $value) {
-					$row[$key] = $value;
-				}
-				array_push($data, $row);
-			}
-
-			echo json_encode($data);
+			echo $data;
 		} else {
 			header('HTTP/1.0 400 Bad Request');
 		}
