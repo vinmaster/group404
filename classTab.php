@@ -1,7 +1,6 @@
 <?php
-
-$page_title = 'Dashboard';
-// $page_script = 'dashboard.js';
+$page_title = 'Class Schedule Tab';
+$page_script = 'classTab.js';
 $page_redirect = 'index.php';
 
 function __autoload($classname) {
@@ -17,12 +16,14 @@ include('php/header.php');
 
 ?>
 
-<a href="logout.php">Logout</a>
-<a href="curriculumTab.php">Curriculum Tab</a>
-<a href="studentTab.php">Student Tab</a>
-<a href="classTab.php">Class Schedule Tab</a>
+<h3>Class</h3>
+<div>
+	<p>
+		No class stuff yet
+	</p>
+</div>
 
-<?php
+<?php 
 
 include('php/footer.php');
 
