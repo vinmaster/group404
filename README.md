@@ -15,25 +15,25 @@ Assumptions
 
 Todo
 -----------
-- [x]Login page
-- []Dashboard UI/UX
-- [x]Parse TSV file
-- []Parse TSV from external url
-- []Put parsed curriculum into table
-- []Generate a group of students based on parameters
-- []Use graph data structure for curriculum
-- []Generate BI Tool for data
-- []Navigate between list of curriculum
-- []Generate metrics for each curriculum:
-- []Detail view when one curriculum is selected
-- []Navigate between list of students
-- []Generate metrics for each student
-- []Detail view when one student is selected
-- []Find optimal class schedule
-- []Generate metrics for class schedule
-- []Navigation for list of class schedule for different quarters
-- []Detail view of class schedule
-- []Visual representation of data using charts, graphs, etc.
+- [x] Login page
+- [] Dashboard UI/UX
+- [x] Parse TSV file
+- [] Parse TSV from external url
+- [] Put parsed curriculum into table
+- [] Generate a group of students based on parameters
+- [] Use graph data structure for curriculum
+- [] Generate BI Tool for data
+- [] Navigate between list of curriculum
+- [] Generate metrics for each curriculum:
+- [] Detail view when one curriculum is selected
+- [] Navigate between list of students
+- [] Generate metrics for each student
+- [] Detail view when one student is selected
+- [] Find optimal class schedule
+- [] Generate metrics for class schedule
+- [] Navigation for list of class schedule for different quarters
+- [] Detail view of class schedule
+- [] Visual representation of data using charts, graphs, etc.
 
 Resources
 -----------
@@ -47,6 +47,12 @@ Resources
 
 - <http://www.chartjs.org/>
 - <http://d3js.org/>
+
+**Testing Code**
+
+- <http://writecodeonline.com/php/>
+- <https://addons.mozilla.org/en-us/firefox/addon/restclient/>
+
 
 Changelog
 -----------
