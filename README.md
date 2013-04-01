@@ -9,7 +9,7 @@ Assumptions
 -----------
 - Maxiumum units per quarter is 20 units
 - Uploaded curriculum is not to change
-- Students who drop out can come back
+- Students who drop out can come back as a new transfer student
 - Classes can have multiple sections
 - Budget is based on faculties and classrooms that quarter
 
