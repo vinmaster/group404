@@ -57,9 +57,13 @@ Resources
 - <http://www.bootstraptutorials.com/>
 - <http://www.revillwebdesign.com/twitter-bootstrap-tutorial/>
 - <http://www.w3resource.com/twitter-bootstrap/tutorial.php>
+- <http://www.tripwiremagazine.com/2013/02/twitter-bootstrap-templates.html>
+- <http://www.keenthemes.com/preview/index.php?theme=conquer>
+- <http://www.berriart.com/sidr/>
 
 Changelog
 -----------
+- 2013-04-01 Re-design sign in page with twitter bootstrap
 - 2013-03-31 Add class schedule tab and supporting files
 - 2013-03-31 Create Wrapper for Student and Curriculum tables
 - 2013-03-31 Initial Commit to GitHub
