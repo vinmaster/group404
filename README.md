@@ -12,6 +12,7 @@ Assumptions
 - Students who drop out can come back as a new transfer student
 - Classes can have multiple sections
 - Budget is based on faculties and classrooms that quarter
+- We can add different costs to the room and the professors per unit or per class taught but due to time constraints
 
 Todo
 -----------
