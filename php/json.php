@@ -12,12 +12,12 @@ if (isset($_POST['request'])) {//isset($_POST['login']) AND
 		$request = $_POST['request'];
 
 		if ($request === 'curriculum') {
-			if (isset($_POST['year']) && isset($_POST['quarter'])) {
+			if (isset($_POST['year']) && isset($_POST['major'])) {
 				$year = $_POST['year'];
-				$quarter = $_POST['quarter'];
+				$major = $_POST['major'];
 
 				include_once('../classes/CurriculumList.php');
-				$curriculumTable = new CurriculumList($year, $quarter);
+				$curriculumTable = new CurriculumList($year, $major);
 				if (!$curriculumTable->isEmpty()) {
 					$data = $curriculumTable->toJSON();
 				} else {

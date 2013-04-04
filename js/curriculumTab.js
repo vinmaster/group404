@@ -18,8 +18,9 @@ function curriculumChange(select) {
 		} else {
 			// Create a new table
 			console.log('creating new table');
-			var tableHeader = '<tr><th>Class ID</th><th>Units</th><th>Prerequisites</th><th>Companion Class</th></tr>';
-			table = $('<table border="1" id="curriculumTable">'+tableHeader+'</table>');
+			var colArray=["Class ID", "Units", "Prerequisites", "Companion", "Select", "Detail"];
+			var tableHeader = '<tr><th>'+colArray.join("</th><th>")+'</th></tr>';
+			table = $('<table id="curriculumTable" class="table table-striped">'+tableHeader+'</table>');
 			$('#curriculumTableDiv').append(table);
 		}
 		console.log(data);
@@ -28,10 +29,12 @@ function curriculumChange(select) {
 		var tableData = '';
 		$.each(data, function(index) {
 			tableData += '<tr>';
-			tableData += '<td>'+data[index].class+'</td>';
+			tableData += '<td>'+data[index].classname+'</td>';
 			tableData += '<td>'+data[index].units+'</td>';
 			tableData += '<td>'+data[index].prerequisites+'</td>';
 			tableData += '<td>'+data[index].corequisites+'</td>';
+			tableData += '<td><input type="button" class="btn btn-info" onClick="rowSelect(this)" value="Select"/></td>';
+			tableData += '<td><button class="btn btn-warning" data-toggle="modal">View</button></td>';
 			tableData += '</tr>';
 		});
 		table.append(tableData);
@@ -46,3 +49,24 @@ function curriculumChange(select) {
 		}
 	});
 }
+
+function rowSelect(btn) {
+	if (btn.value === "Select") {
+		var row = btn.parentNode.parentNode;
+		$(row).addClass("success");
+		btn.value = "Unselect";
+		$(btn).removeClass("btn-info");
+		$(btn).addClass("btn-danger");
+	} else if (btn.value === "Unselect") {
+		var row = btn.parentNode.parentNode;
+		$(row).removeClass("success");
+		btn.value = "Select";
+		$(btn).removeClass("btn-danger");
+		$(btn).addClass("btn-info");
+	}
+}
+
+$(document).ready(function() {
+	$("#curriculum-nav").addClass("active");
+	$('#myTabs').tab();
+});

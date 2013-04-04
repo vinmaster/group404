@@ -16,28 +16,56 @@ include('php/header.php');
 
 ?>
 
-<h3>Curriculum</h3>
-<div>
-	<p>
-	paragraph here
-	</p>
-	<form id="curriculumForm">
-		Year
-		<select id="year" name='year' onchange="curriculumChange(this)">
-			<option value='Year'>Year</option>
-			<option value='2012'>2012</option>
-			<option value='2013'>2013</option>
-		</select>
-		Quarter
-		<select id="quarter" name='quarter' onchange="curriculumChange(this)">
-			<option value='Quarter'>Quarter</option>
-			<option value='Fall'>Fall</option>
-			<option value='Winter'>Winter</option>
-			<option value='Spring'>Spring</option>
-			<option value='Summer'>Summer</option>
-		</select>
-	</form>
-	<div id="curriculumTableDiv">
+<div class="well">
+	<div class="container">
+		<div class="row-fluid">
+			<div class="span3 offset1"><h1>Curriculum<h1></div>
+			<div class="form-horizontal">
+				<form id="curriculumForm">
+					<label>Choose the curriculum to list:</label>
+					Year
+					<select id="year" name='year' onchange="curriculumChange(this)">
+						<option value='Year'>Year</option>
+						<option value='2012'>2012</option>
+						<option value='2013'>2013</option>
+					</select>
+					Major
+					<select id="major" name='major' onchange="curriculumChange(this)">
+						<option value='Major'>Major</option>
+						<option value='Computer Science'>Computer Science</option>
+					</select>
+				</form>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="container fluid">
+	<div class="row-fluid">
+		<div class="tabbable">
+			<ul class="nav nav-tabs" id="myTabs">
+				<li class="active">
+					<a data-toggle="tab" href="#table">Table</a>
+				</li>
+				<li class="">
+					<a data-toggle="tab" href="#graph">Graph</a>
+				</li>
+			</ul>
+
+			<div class="tab-content">
+				<div id="table" class="tab-pane active">
+					<div class="span10" id="curriculumTableDiv">
+
+					</div>
+				</div>
+				<div id="graph" class="tab-pane">
+					Put some graph stuff here
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 

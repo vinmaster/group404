@@ -8,27 +8,50 @@ function __autoload($classname) {
 class CurriculumList {
 	private $db;
 	private $table;
+	private $empty;
 
-	public function __construct($year, $quarter) {
+	public function __construct($year, $major) {
+		$this->empty = false;
 		$this->db = MyPDO::getDb();
 
 		// Query string
-		$str = "SELECT * FROM curriculum ";
-		$str .= "WHERE year=:year ";
-		$str .= "AND quarter=:quarter";
+		$str = "SELECT id FROM `majors`";
+		$str .= "WHERE major=:major";
 		$query = $this->db->prepare($str);
-		$query->bindParam(':year', $year);
-		$query->bindParam(':quarter', $quarter);
+		$query->bindParam(':major', $major);
 		$query->execute();
-		
-		//create an array of Curriculum objects
-		$this->table = $query->fetchAll(PDO::FETCH_CLASS, "Curriculum");
+		$majorArray = $query->fetchAll(PDO::FETCH_CLASS, "Major");
+
+		// Continue only if major id is found from major name
+		if (count($majorArray) === 0) {
+			$this->empty = true;
+		} else {
+			// Get the major id
+			$major_id = $majorArray[0]->id;
+
+			// Query string
+			$str = "SELECT * FROM curriculum ";
+			$str .= "WHERE year=:year ";
+			$str .= "AND major_id=:major_id ";
+			$query = $this->db->prepare($str);
+			$query->bindParam(':year', $year);
+			$query->bindParam(':major_id', $major_id);
+			$query->execute();
+			
+			//create an array of Curriculum objects
+			$this->table = $query->fetchAll(PDO::FETCH_CLASS, "Curriculum");
+			if (count($this->table) === 0) {
+				$this->empty = true;
+			}
+		}
 	}
 
+	// This is called to make sure result query is not empty
 	public function isEmpty() {
-		return count($this->table) === 0;
+		return $this->empty;
 	}
 
+	// Return result query in json format
 	public function toJSON() {
 		return json_encode($this->table);
 	}
