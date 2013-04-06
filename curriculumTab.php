@@ -1,17 +1,23 @@
 <?php
+// This string will the name of this webpage
 $page_title = 'Curriculum Tab';
+// Load only one script for this page
 $page_script = 'curriculumTab.js';
+// Where to redirect if the user is not signed in
 $page_redirect = 'index.php';
 
+// This function is called when PHP is looking for a class that you called
 function __autoload($classname) {
     $filename = "./classes/". $classname .".php";
     include_once($filename);
 }
 
+// Check if the user is logged in, if not, redirect. If yes, show html
 if (!Auth::isLoggedIn()) {
   header( 'Location: '.$page_redirect );
 } else {
 
+// This header part is the same for all pages
 include('php/header.php');
 
 ?>
@@ -66,6 +72,18 @@ include('php/header.php');
 				</div>
 			</div>
 		</div>
+	</div>
+</div>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+		<h3 id="myModalLabel">Curriculum Detail</h3>
+	</div>
+	<div class="modal-body">
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 	</div>
 </div>
 

@@ -27,14 +27,15 @@
           <div class="navbar-inner">
             <a class="brand" href="#">group404</a>
             <ul class="nav">
-              <li class=""><a href="dashboard.php">Dashboard</a></li>
+              <li class=""><a href="dashboard.php">Class Schedule</a></li>
               <li class="" id="curriculum-nav"><a href="curriculumTab.php">Curriculum</a></li>
               <li class="" id="student-nav"><a href="studentTab.php">Student</a></li>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings</a>
                 <ul class="dropdown-menu">
-                  <li><a href="#">Import from file</a></li>
-                  <li><a href="#">Import from external URL</a></li>
+                  <li><a href="import.php">Import Curriculum from file</a></li>
+                  <li><a href="import.php">Import Curriculum from external URL</a></li>
+                  <li><a href="students.php">Generate Students</a></li>
                   <li class="divider"></li>
                   <li><a href="logout.php">Logout</a></li>
                 </ul>

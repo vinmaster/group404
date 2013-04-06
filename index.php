@@ -37,8 +37,9 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
     printf("<h1>Access Denied</h1>");
     exit();
   }
-  printf('cookie: '.$_COOKIE['login'].'<br>');
-  printf('session: '.$_SESSION['login'].'<br>');
+  header( 'Location: dashboard.php' );
+  // printf('cookie: '.$_COOKIE['login'].'<br>');
+  // printf('session: '.$_SESSION['login'].'<br>');
 }
 
 // User is not logged in and did not submit a post request, let them sign in
@@ -116,7 +117,9 @@ else {
         </label>
         <button class="btn btn-large btn-primary" type="submit">Sign in</button>
       </form>
-
+      <div align="center">
+        <img border="0" src="http://www.operatorchan.org/404/404.jpg" alt="404 Not Found" width="640" height="427">
+      </div>
     </div> <!-- /container -->
 
   </body>

@@ -10,8 +10,10 @@ class CurriculumList {
 	private $table;
 	private $empty;
 
+	// Constructor
 	public function __construct($year, $major) {
 		$this->empty = false;
+		// Use the MyPDO class inside classes folder to connect to MySQL
 		$this->db = MyPDO::getDb();
 
 		// Query string
@@ -41,6 +43,7 @@ class CurriculumList {
 			//create an array of Curriculum objects
 			$this->table = $query->fetchAll(PDO::FETCH_CLASS, "Curriculum");
 			if (count($this->table) === 0) {
+				// empty variable is checked before fetching json format of this table
 				$this->empty = true;
 			}
 		}
