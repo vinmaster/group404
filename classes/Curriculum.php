@@ -5,7 +5,7 @@ class Curriculum {
 	public $major_id;
 	public $year;
 	public $classname;
-	public $unites;
+	public $units;
 	public $prerequisites;
 	public $corequisites;
 }
