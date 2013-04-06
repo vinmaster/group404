@@ -14,7 +14,7 @@ Assumptions
 - Budget is based on faculties and classrooms that quarter
 - We can add different costs to the room and the professors per unit or per class taught but due to time constraints
 
-Todo
+Todo (Outdated, check facebook for newest todo list)
 -----------
 - [x] Login page
 - [] Dashboard UI/UX
