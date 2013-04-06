@@ -35,9 +35,8 @@
                 <ul class="dropdown-menu">
                   <li><a href="import.php">Import Curriculum from file</a></li>
                   <li><a href="import.php">Import Curriculum from external URL</a></li>
-                  <li><a href="students.php">Generate Students</a></li>
                   <li class="divider"></li>
-                  <li><a href="logout.php">Logout</a></li>
+                  <li><a href="students.php">Generate Students</a></li>
                 </ul>
               </li>
               <li class=""><a href="logout.php">Logout</a></li>
