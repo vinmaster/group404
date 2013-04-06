@@ -27,7 +27,7 @@
           <div class="navbar-inner">
             <a class="brand" href="#">group404</a>
             <ul class="nav">
-              <li class=""><a href="dashboard.php">Class Schedule</a></li>
+              <li class="" id="dashboard-nav"><a href="dashboard.php">Class Schedule</a></li>
               <li class="" id="curriculum-nav"><a href="curriculumTab.php">Curriculum</a></li>
               <li class="" id="student-nav"><a href="studentTab.php">Student</a></li>
               <li class="dropdown">

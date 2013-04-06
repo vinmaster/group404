@@ -1,7 +1,7 @@
 <?php
 
 $page_title = 'Dashboard';
-// $page_script = 'dashboard.js';
+$page_script = 'dashboard.js';
 $page_redirect = 'index.php';
 
 function __autoload($classname) {

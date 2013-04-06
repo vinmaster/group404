@@ -25,12 +25,6 @@ include('php/header.php');
 	</div>
 	<button type="button" onclick="listStudents()">List Students</button>
 </div>
-<h3>Class</h3>
-<div>
-	<p>
-		This is not the class you are looking for
-	</p>
-</div>
 
 <?php 
 

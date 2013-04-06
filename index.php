@@ -27,12 +27,12 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
     if (isset($_POST['remember_me']) && $_POST['remember_me'] == 'on') {
       // Set cookie for 1 year
       setcookie("login", $username."=".md5($password), time() + 86400 * 365);
-      printf("<h1>Login successful</h1>");
+      // printf("<h1>Login successful</h1>");
     } else {
       $_SESSION['login'] = $username."=".md5($password);
-      printf("<h1>Login successful</h1>");
+      // printf("<h1>Login successful</h1>");
     }
-    echo '<a href="dashboard.php">Go to dashboard</a>';
+    // echo '<a href="dashboard.php">Go to dashboard</a>';
   } else {
     printf("<h1>Access Denied</h1>");
     exit();

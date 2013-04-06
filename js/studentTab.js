@@ -47,3 +47,9 @@ function listStudents() {
 		}
 	});
 }
+
+// Called when the html document is finished loading
+$(document).ready(function() {
+	// Engrave the student at the navigation bar
+	$("#student-nav").addClass("active");
+});
