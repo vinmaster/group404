@@ -16,14 +16,14 @@ include('php/header.php');
 
 ?>
 
-<h3>Generate Students</h3>
-<div>
-	<p>
-		A drop down for different students table. Selecting one will display the students
-	</p>
-	<p>
-		A button to generate students and able to save to database
-	</p>
+<div class="container fluid">
+	<div class="row-fluid span12">
+		<h3>Generate Students</h3>
+		<?php
+			$factory = new StudentFactory("1", "2012");
+
+		?>
+	</div>
 </div>
 
 <?php 

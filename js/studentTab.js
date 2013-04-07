@@ -12,9 +12,9 @@ function listStudents() {
 		} else {
 			// Create a new table
 			console.log('creating new table');
-			var colArray=["Student ID", "Name", "Enroll Year", "Enroll Quarter", "Dropout", "GPA", "Units", "Type", "Classes Enrolled", "Classes Completed"];
+			var colArray=["Student ID", "Name", "Enroll Year", "Enroll Quarter", "Dropout", "GPA", "Units", "Type"];
 			var tableHeader = '<tr><th>'+colArray.join("</th><th>")+'</th></tr>';
-			table = $('<table border="1" id="studentTable">'+tableHeader+'</table>');
+			table = $('<table class="table table-striped" id="studentTable">'+tableHeader+'</table>');
 			$('#studentTableDiv').append(table);
 		}
 		console.log(data);
@@ -31,8 +31,8 @@ function listStudents() {
 			tableData += '<td>'+data[index].gpa+'</td>';
 			tableData += '<td>'+data[index].units+'</td>';
 			tableData += '<td>'+data[index].type+'</td>';
-			tableData += '<td>'+data[index].classes_enrolled+'</td>';
-			tableData += '<td>'+data[index].classes_completed+'</td>';
+			ableData += '<td><input type="button" class="btn btn-info" onClick="rowSelect(this)" value="Select"/></td>';
+			tableData += '<td><button class="btn btn-warning" data-toggle="modal">View</button></td>';
 			tableData += '</tr>';
 		});
 		table.append(tableData);

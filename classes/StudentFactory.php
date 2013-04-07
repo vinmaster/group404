@@ -1,21 +1,16 @@
 <?php
 
-function __autoload($classname) {
-    $filename = $classname .".php";
-    include_once($filename);
-}
-
 class StudentFactory {
 	private $db;
 	private $curriculum_table;
 	private $curriculum_tree;
 
-	public function __construct($curriculum_id) {
+	public function __construct($major_id, $year) {
 		$this->db = MyPDO::getDb();
 
 		// Query string
 		$str = "SELECT * FROM curriculum ";
-		$str .= "WHERE id = '$curriculum_id' ";
+		$str .= "WHERE major_id = '$major_id' AND year = '$year' ";
 		$query = $this->db->prepare($str);
 		$query->execute();
 
@@ -23,20 +18,35 @@ class StudentFactory {
 		$this->curriculum_table = $query->fetchAll(PDO::FETCH_CLASS, "Curriculum");
 		$this->curriculum_tree = new CurriculumNode("root");
 
-		foreach ($curriculum_table as $index => $row) {
-			$id = $row['id'];
-			$major_id = $row['major_id'];
-			$year = $row['year'];
-			$classname = $row['classname'];
-			$units = $row['units'];
-			$prerequisites = $row['prerequisites'];
-			$corequisites = $row['corequisites'];
-			if ($row['prerequisites'] === '') {
-				$this->curriculum_tree->addChildren(new CurriculumNode($classname));
-				unset($curriculum_table[$index]);
+		// Put all the classes with no prereq into tree
+		foreach ($this->curriculum_table as $key => $row) {
+
+			if ($row->prerequisites === '') {
+				$this->curriculum_tree->addChildren(new CurriculumNode($row));
+				unset($this->curriculum_table[$key]);
 			}
+		}
+
+		// Connect the classes with the prereq needed
+		$unvisited = $this->curriculum_tree->children;
+		foreach ($unvisited as $node) {
 
 		}
+		// foreach ($this->curriculum_table as $key => $row) {
+		// 	$unvisited = $this->curriculum_tree->children;
+		// 	$new_node = new CurriculumNode($row);
+		// 	foreach ($unvisited as $course) {
+		// 		if ($new_node->prerequisites === $course->classname) {
+		// 			$course->addChildren($new_node);
+		// 		}
+		// 		// Breath-first search
+		// 		array_merge($unvisited, $course->children);
+		// 	}
+		// }
+		print_r($this->curriculum_tree);
+		$this->println("");
+		$this->println("");
+		print_r($this->curriculum_table);
 	}
 
 	public function generateStudents() {
@@ -64,7 +74,7 @@ class StudentFactory {
 		println("End script");
 	}
 
-	private function println($s) {
+	function println($s) {
 		echo $s.'<br>';
 	}
 }
