@@ -57,7 +57,7 @@ include('php/header.php');
 					<a data-toggle="tab" href="#table">Table</a>
 				</li>
 				<li class="">
-					<a data-toggle="tab" href="#graph">Graph</a>
+					<a data-toggle="tab" href="#flow">Flowchart</a>
 				</li>
 			</ul>
 
@@ -67,8 +67,8 @@ include('php/header.php');
 
 					</div>
 				</div>
-				<div id="graph" class="tab-pane">
-					Put some graph stuff here
+				<div id="flow" class="tab-pane">
+					Choose curriculum year first
 				</div>
 			</div>
 		</div>

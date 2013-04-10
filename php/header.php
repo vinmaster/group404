@@ -12,6 +12,7 @@
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
   <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+  <script src="http://d3js.org/d3.v2.js?2.9.1"></script>
   <?php
   if (isset($page_script)) {
     echo '<script type="text/javascript" src="../js/'.$page_script.'"></script>';

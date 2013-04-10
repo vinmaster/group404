@@ -23,7 +23,7 @@ function curriculumChange(select) {
 		} else {
 			// Create a new table
 			// console.log('creating new table');
-			var colArray=["ID", "Class ID", "Units", "Prerequisites", "Companion", "Select", "Detail"];
+			var colArray=["ID", "Class ID", "Units", "Prerequisites", "Companion", "Detail"];
 			var tableHeader = '<tr><th>'+colArray.join("</th><th>")+'</th></tr>';
 			table = $('<table id="curriculumTable" class="table table-striped">'+tableHeader+'</table>');
 			$('#curriculumTableDiv').append(table);
@@ -38,12 +38,84 @@ function curriculumChange(select) {
 			tableData += '<td>'+data[index].units+'</td>';
 			tableData += '<td>'+data[index].prerequisites+'</td>';
 			tableData += '<td>'+data[index].corequisites+'</td>';
-			tableData += '<td><input type="button" class="btn btn-info" onClick="rowSelect(this)" value="Select"/></td>';
+			//tableData += '<td><input type="button" class="btn btn-info" onClick="rowSelect(this)" value="Select"/></td>';
 			tableData += '<td><a class="btn btn-warning" href="../php/detail.php?id='+data[index].id+'" data-target="#myModal" data-toggle="modal">View</a></td>';
 			tableData += '</tr>';
 		});
 		// Add the rows with data to the table
 		table.append(tableData);
+
+		// flow chart
+		d3.json("../php/json.php?request=curriculumGraph&year=2012", function(data) {
+		  var links = data;
+		  var nodes = {};
+
+		  // Compute the distinct nodes from the links.
+		  links.forEach(function(link) {
+		    link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+		    link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+		  });
+
+		  var width = 960,
+		      height = 960;
+
+		  var force = d3.layout.force()
+		      .nodes(d3.values(nodes))
+		      .links(links)
+		      .size([width, height])
+		      .linkDistance(60)
+		      .charge(-300)
+		      .on("tick", tick)
+		      .start();
+
+		  var svg = d3.select("#flow").append("svg")
+		      .attr("width", width)
+		      .attr("height", height);
+
+		  var link = svg.selectAll(".link")
+		      .data(force.links())
+		    .enter().append("line")
+		      .attr("class", "link");
+
+		  var node = svg.selectAll(".node")
+		      .data(force.nodes())
+		    .enter().append("g")
+		      .attr("class", "node")
+		      .on("mouseover", mouseover)
+		      .on("mouseout", mouseout)
+		      .call(force.drag);
+
+		  node.append("circle")
+		      .attr("r", 8);
+
+		  node.append("text")
+		      .attr("x", 12)
+		      .attr("dy", ".35em")
+		      .text(function(d) { return d.name; });
+
+		  function tick() {
+		    link
+		        .attr("x1", function(d) { return d.source.x; })
+		        .attr("y1", function(d) { return d.source.y; })
+		        .attr("x2", function(d) { return d.target.x; })
+		        .attr("y2", function(d) { return d.target.y; });
+
+		    node
+		        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+		  }
+
+		  function mouseover() {
+		    d3.select(this).select("circle").transition()
+		        .duration(750)
+		        .attr("r", 16);
+		  }
+
+		  function mouseout() {
+		    d3.select(this).select("circle").transition()
+		        .duration(750)
+		        .attr("r", 8);
+		  }
+		});
 	});
 	postRequest.fail(function() {
 		// If the ajax request failed

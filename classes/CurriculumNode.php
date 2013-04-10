@@ -23,6 +23,10 @@ class CurriculumNode {
 	public function addChildren($node) {
 		array_push($this->children, $node);
 	}
+
+	public function __toString() {
+		return $this->classname;
+	}
 }
 
 ?>

@@ -31,8 +31,7 @@ function listStudents() {
 			tableData += '<td>'+data[index].gpa+'</td>';
 			tableData += '<td>'+data[index].units+'</td>';
 			tableData += '<td>'+data[index].type+'</td>';
-			ableData += '<td><input type="button" class="btn btn-info" onClick="rowSelect(this)" value="Select"/></td>';
-			tableData += '<td><button class="btn btn-warning" data-toggle="modal">View</button></td>';
+			tableData += '<td><a class="btn btn-warning" href="../php/studentsTabDetail.php?id='+data[index].id+'" data-target="#myModal" data-toggle="modal">View</a></td>';
 			tableData += '</tr>';
 		});
 		table.append(tableData);
@@ -52,4 +51,21 @@ function listStudents() {
 $(document).ready(function() {
 	// Engrave the student at the navigation bar
 	$("#student-nav").addClass("active");
+});
+// Called when the html document is finished loading
+$(document).ready(function() {
+	// Engrave the Curriculum at the navigation bar
+	$("#student-nav").addClass("active");
+	// Enable tab functionality for Table and Graph tabs
+	$('#myTabs').tab();
+	// Load content into modal for detail view
+	$("a[data-toggle=modal]").click(function (e) {
+		var target = $(this).attr('data-target');
+		var url = $(this).attr('href');
+		$(target).load(url);
+	});
+	// Make sure to remove old modal or else modal uses the same content each time
+	$('#myModal').on('hidden', function () {
+	  $(this).removeData('modal');
+	});
 });

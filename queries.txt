@@ -1,0 +1,151 @@
+NOTES
+-----------------------------------------------
+need to add a classname id so class names can be searched by integer value
+update class and grades table EDIT: just went with strings since that is what the example data uses.
+
+CURRICULUM VIEW
+-----------------------------------------------
+# of graduated students:
+
+Number of dropped out students:
+	SELECT COUNT(*)
+	FROM `student`
+	WHERE `dropout` = 1
+
+Average time in quarters taken for a student:
+	SELECT AVG(SUM(`quarters_taken`))
+	FROM (
+		SELECT (enroll_term - <current term>) AS quarters_taken
+		FROM `student`
+	)
+Minimum time in quarters taken by a student:
+	SELECT (enroll-term - <current term>) AS quarters_taken
+	FROM `student`
+	ORDER BY `quarters_taken` ASC
+	LIMIT 1
+Maximum time in quarters taken by a student:
+	SELECT (enroll-term - <current term>) AS quarters_taken
+	FROM `student`
+	ORDER BY `quarters_taken` DESC
+	LIMIT 1
+# of units needed to graduate(by curriculum):
+	SELECT SUM(`units`)
+	FROM `curriculum`
+	WHERE `year` = <MATCHING YEAR>
+	AND `major_id` = <MATCHING ID>
+
+Average # of remaining units to graduate:
+	SELECT AVG(SUM('units')
+	FROM (
+		SELECT `student_id`, SUM(`units`) GROUP BY `student_id`
+		FROM `curriculum`
+		INNER JOIN `grades` ON `grades.class_name` = `curriculum.classname`
+		WHERE `grades.class_id` = `curriculum.id`
+		AND grades.grade != 'F' 
+		AND `major_id` = <MATCHING ID>
+		AND `year` = <MATCHING YEAR>
+	)
+	SUBTRACT THIS VALUE FROM THE ABOVE QUERY
+
+Minimum # of units taken by a student:
+	SELECT `student_id`, SUM(`units`) AS units GROUP BY `student_id`
+	FROM `curriculum`
+	INNER JOIN `grades` ON `grades.class_name` = `curriculum.classname`
+	WHERE `grades.class_id` = `curriculum.id`
+	AND grades.grade != 'F' 
+	AND `major_id` = <MATCHING ID>
+	AND `year` = <MATCHING YEAR>
+	ORDER BY `units` ASC
+	LIMIT 1
+Maximum # of units taken by a student:
+	SELECT `student_id`, SUM(`units`) AS units GROUP BY `student_id`
+	FROM `curriculum`
+	INNER JOIN `grades` ON `grades.class_name` = `curriculum.classname`
+	WHERE `grades.class_id` = `curriculum.id`
+	AND grades.grade != 'F' 
+	AND `major_id` = <MATCHING ID>
+	AND `year` = <MATCHING YEAR>
+	ORDER BY `units` DESC
+	LIMIT 1
+List Classes in a single curriculum:
+	SELECT *
+	FROM `curriculum`
+	WHERE `major_id` = <user major choice value> // if using a drop down menu to pick major then make them line up to id value. otherwise use next query
+	AND `year` = <USER CHOSEN YEAR>;
+
+Get Major id:
+	SELECT id
+	FROM `majors`
+	WHERE `major` = "user major choice"
+
+
+STUDENT VIEW
+------------------------------------------------
+Minimum # of quarters left to grad:
+
+# of classes taken for each student:
+	SELECT `student.ksu_name`, COUNT(*) GROUP BY `student_id`
+	FROM `grades`
+	INNER JOIN `student` ON `student.id` = `grades.student_id`
+# of units accumulated:
+	SELECT `ksu_name`, SUM(`units`) AS units GROUP BY `student_id`
+	FROM `curriculum`
+	INNER JOIN `grades` ON `grades.class_name` = `curriculum.classname`
+	INNER JOIN `student` ON `student.id` = `grades.student_id`
+	WHERE `grades.class_id` = `curriculum.id`
+	AND grades.grade != 'F' 
+	AND `major_id` = <MATCHING ID>
+	AND `year` = <MATCHING YEAR>
+average # of units taken each quarter:
+	SELECT AVG(SUM(units_by_quarter))
+	FROM (
+		SELECT `term` AVG(SUM(*)) AS units_by_quarter GROUP BY `term`
+		FROM `grades'
+		WHERE `student_id` = <STUDENTS ID>
+	)
+//this may be terribly wrong just let me know what comes up when its used
+
+QUERIES FOR GA
+---------------------------------------------------
+# of students in curriculum:
+	SELECT COUNT(*)
+	FROM `student`
+	INNER JOIN `curriculum` as A1 ON `curriculum.year` = `student.enroll_year`
+	INNER JOIN `curriculum` as A2 ON `curriculum.major_id` = `student.major_id`
+
+check if student has taken a class:
+	SELECT COUNT(*)
+	FROM (SELECT `classname`
+		FROM `grades`
+		INNER JOIN `student` on `student_id` = `student.id`
+		WHERE `student_id` = <STUDENT's ID>)
+	WHERE `classname` = <input classname>
+//if >= 1 then has taken
+
+# of students needing a class:
+	SELECT `classname`, COUNT(*) GROUP BY `classname`
+	FROM `curriculum`
+	WHERE `classname` = <CLASS CHECKING>
+	AND NOT IN (SELECT 'student_id` `classname` GROUP BY `student_id`
+			FROM `grades`
+			INNER JOIN `student` on `student_id` = `student.id`
+			WHERE `student_id` = <STUDENT's ID>)
+//needs to be defined better
+
+Classes a student has taken:
+
+	SELECT `classname`
+	FROM `grades`
+	INNER JOIN `student` on `student_id` = `student.id`
+	WHERE `student_id` = <STUDENT's ID>
+
+Classes a student has not taken:
+	SELECT `classname`
+	FROM `curriculum`
+	INNER JOIN `student` ON `enroll_year` = `year`
+	INNER JOIN `student` ON `curriculum.major_id` = `student.major_id`
+	WHERE `classname` NOT IN (SELECT `classname`
+					FROM `grades`
+					INNER JOIN `student` on `student_id` = `student.id`
+					WHERE `student_id` = <STUDENT's ID>)
+
