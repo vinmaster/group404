@@ -5,51 +5,53 @@ function __autoload($classname) {
     include_once($filename);
 }
 // Use the MyPDO class inside classes folder to connect to MySQL
-$this->db = MyPDO::getDb();
+
+$db = MyPDO::getDb();
 
 $classneeds=array();
 //Get number of students needing each class
 //-----------------------------------------------------------------//
 // Query string to get class listing and prerequisites
 $str = "SELECT DISTINCT `classname`, `prerequisites`  FROM `curriculum`";
-$str .= "WHERE major=1 ORDER BY `classname` DESC";
-$query = $this->db->prepare($str);
-$result=$query->execute();
+$str .= "WHERE major_id=1 ORDER BY `classname` DESC";
+$query = $db->prepare($str);
+$query->execute();
+$result=$query->fetchALL(PDO::FETCH_ASSOC);
 
-while(($row = mysql_fetch_assoc($result))) {
-	$classneeds[$row[`classname`]] = 0;
+foreach($result as $row) {
+	$classneeds[$row['classname']] = 0;
 }
 
 // Query string to get student listing
-$str2 = "SELECT `id`  FROM `student`";
-$query2 = $this->db->prepare($str2);
-$result2=$query2->execute();
+$str2 = "SELECT `id` , `enroll_year`  FROM `student`";
+$query2 = $db->prepare($str2);
+$query2->execute();
+$result2 = $query2->fetchALL(PDO::FETCH_ASSOC);
 
-while(($student = mysql_fetch_assoc($result2))) {
+foreach($result2 as $student) {
 	// Query string to get classes a student has taken
 	$str1 = "SELECT `classname`  FROM `curriculum`";
-	$str1 .= "INNER JOIN `student` ON `year` = `year_enrolled'";
-	$str1 .= "WHERE `classname` NOT IN (";
-	$str1 .= "SELECT `classname` FROM `grades`";
-	$str1 .= "INNER JOIN `student` ON `student_id` = `student`.`id`";
-	$str1 .= "WHERE `student_id` = ";
-	$str1 .= $student;
-	$str4 = "SELECT `classname` FROM `curriculum` ";
-	$str4 .= "WHERE major=1 ";
-	$str4 .= "AND NOT IN ";
-	$str4 .= str1;
-	$query1 = $this->db->prepare($str4);
-	$result1=$query1->execute();
+	$str1 .= "WHERE `year` = ";
+	$str1 .= $student['enroll_year'];
+	//$str1 .= "AND `classname` NOT IN (";
+	//$str1 .= "SELECT `classname` FROM `grades`";
+	//$str1 .= "WHERE `student_id` = ";
+	//$str1 .= $student['id'];
+	$query1 = $db->prepare($str1);
+	$query1->execute();
+	$result1=$query1->fetchALL(PDO::FETCH_ASSOC);
 	
-	while(($row = mysql_fetch_assoc($result1))) {
-		$classneeds[$row[`classname`] += 1;
+	foreach($result1 as $row) {
+		echo "class: " .$row['classname'] ."<br>";
+		echo $classneeds[$row['classname']];
+		$classneeds[$row['classname']] += 1;
 	}
 	sort($classneeds);
 }
 //subtracts classneeds value for each prereq needed.
 //query to get class list with prere
 
-while(($row = mysql_fetch_assoc($result))) {
+foreach($result as $row) {
 	$prereqs = 0;
 	$string = $row[`prerequisites`];
 	$prereq = "";
@@ -65,6 +67,10 @@ while(($row = mysql_fetch_assoc($result))) {
 		
 	}
 }
+//free memory NOT WORKING
+//mysqli_free_result($query2);
+//mysqli_free_result($query1);
+//mysqli_free_result($query);
 //----------------------------------------------------------------//
 
 $professors=array();
@@ -72,18 +78,20 @@ $rooms=array();
 
 //initilize professors list with time schedule
 $strprof = "SELECT `id`  FROM `professor`";
-$queryprof = $this->db->prepare($str);
-$resultprof=$queryprof->execute();
-while(($row = mysql_fetch_assoc($resultprof))) {
-	$professors[$row[`id`]] = array(new TimeBlock, 0)
+$queryprof = $db->prepare($strprof);
+$queryprof->execute();
+$resultprof= $queryprof->fetchALL(PDO::FETCH_ASSOC);
+foreach($resultprof as $row) {
+	$professors[$row[`id`]] = array(new Timeblock, 0);
 }
 
 //initialize rooms list with sizes and time schedules
 $str = "SELECT `id`, `class_size`  FROM `rooms`";
-$query = $this->db->prepare($str);
-$result=$query2->execute();
-while(($row = mysql_fetch_assoc($result))) {
-	$rooms[$row[`id`]] = array(new TimeBlock, $row[`class_size`], 0);
+$query = $db->prepare($str);
+$query->execute();
+$result=$query->fetchALL(PDO::FETCH_ASSOC);
+foreach($result as $row) {
+	$rooms[$row[`id`]] = array(new Timeblock, $row[`class_size`], 0);
 }
 $flag = 0;
 $roomcnt = 0;
@@ -97,39 +105,39 @@ while(flag==0) {
 		break;
 	}
 	//if a teacher is worked to the max set flag to 1
-	for($i=0; i< sizeof($professors); i++) {
+	for($i=0; $i< sizeof($professors); $i++) {
 		$count=0;
-		for($j=0; j< sizeof($professors[i][0]->$times); i++) {
-			if ( $professors[i][0]->$times[j] == 1) {
+		for($j=0; $j< sizeof($professors[$i][0]->$times); $i++) {
+			if ( $professors[$i][0]->$times[$j] == 1) {
 				$count += 1;
 			}
 		}
-		if ($count == sizeof($professors[i][0]->$times) {
-			$professors[i][1] = 1;
+		if ($count == sizeof($professors[i][0]->$times)) {
+			$professors[$i][1] = 1;
 		}
 	}
 	//if a room are used to the max set flag to 1
-	for($i=0; i< sizeof($rooms); i++) {
+	for($i=0; $i< sizeof($rooms); $i++) {
 		$count=0;
-		for($j=0; j< sizeof($rooms[i][1]->$times); i++) {
-			if ( $rooms[i][1]->$times[j] == 1) {
+		for($j=0; $j< sizeof($rooms[$i][1]->$times); $i++) {
+			if ( $rooms[$i][1]->$times[$j] == 1) {
 				$count += 1;
 			}
 		}
-		if ($count == sizeof($rooms[i][1]->$times) {
-			$rooms[i][2] = 1;
+		if ($count == sizeof($rooms[i][1]->$times)) {
+			$rooms[$i][2] = 1;
 		}
 	}
 	
-	for($i=0; i< sizeof($rooms); i++) {
-		if ($rooms[i][2] == 0) {
+	for($i=0; $i< sizeof($rooms); $i++) {
+		if ($rooms[$i][2] == 0) {
 			$maxed = 0;
 			break;
 		}
 	}
 	
-	for($i=0; i< sizeof($professors); i++) {
-		if ($rooms[i][1] == 0) {
+	for($i=0; $i< sizeof($professors); $i++) {
+		if ($rooms[$i][1] == 0) {
 			$maxed = 0;
 			break;
 		}
@@ -139,27 +147,27 @@ while(flag==0) {
 		break;
 	}
 	$class = new GAClass;
-	$class->classname = key(classneeds[0]);
+	$class->classname = key($classneeds[0]);
 	//give class a room depending on needs and size
 	while(true) {
-		if ($classneeds[0] <= $rooms[roomcnt][1]) {
-			$classneeds[0]-= $rooms[roomcnt][1];
-			$class->room = key($rooms[roomcnt])
-			for($i=0; i< sizeof($rooms[roomcnt][0]->$times); i++ {
-				if ( $rooms[$roomcnt][0]->$times[i] == 0) {
-					$rooms[$roomcnt][0]->$times[i] = 1;
-					$class->time = i;
+		if ($classneeds[0] <= $rooms[$roomcnt][1]) {
+			$classneeds[0]-= $rooms[$roomcnt][1];
+			$class->room = key($rooms[$roomcnt]);
+			for($i=0; $i< sizeof($rooms[$roomcnt][0]->$times); $i++) {
+				if ( $rooms[$roomcnt][0]->$times[$i] == 0) {
+					$rooms[$roomcnt][0]->$times[$i] = 1;
+					$class->time = $i;
 				}
 			}
 			//find an available professor and assign
-			for($i=0; i< sizeof($professors); i++) {
+			for($i=0; $i< sizeof($professors); $i++) {
 				if($breakflag==1) {
 					break;
 				}
-				for($j=0; j< sizeof($professors[i]->$times); i++) {
-					if ( $professors[i]->$times[j] == 0) {
-						$class->professor = i;
-						$professors[i]->$times[j] = 1;
+				for($j=0; $j< sizeof($professors[$i]->$times); $i++) {
+					if ( $professors[$i]->$times[$j] == 0) {
+						$class->professor = $i;
+						$professors[$i]->$times[$j] = 1;
 						$breakflag=1;
 						break;
 					}
@@ -169,15 +177,14 @@ while(flag==0) {
 			break;
 		}
 		else {
-			roomcnt++;
+			$roomcnt++;
 		}
 	}
+	print_r($class);
 	array_push($schedule, $class);
 	rsort($classneeds);
 }
 
-$class->classname = $classneeds[rand(0,sizeof($classneeds))]
-
-
+print_r($schedule);
 
 ?>

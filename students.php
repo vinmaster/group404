@@ -15,7 +15,15 @@ if (!Auth::isLoggedIn()) {
 include('php/header.php');
 
 ?>
-
+<div class="well">
+   <div class="container">
+      <div class="row-fluid">
+        <div class="span5 offset1">
+          <h1>Generate Students<h1>
+        </div>
+      </div>
+   </div>
+</div>
 <div class="container fluid">
 	<div class="row-fluid span12">
 		<div>

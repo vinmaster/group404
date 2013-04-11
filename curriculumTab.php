@@ -29,17 +29,33 @@ include('php/header.php');
 			<div class="form-horizontal">
 				<form id="curriculumForm">
 					<label>Choose the curriculum to list:</label>
-					Year
-					<select id="year" name='year' onchange="curriculumChange(this)">
-						<option value='Year'>Year</option>
-						<option value='2012'>2012</option>
-						<option value='2013'>2013</option>
-					</select>
-					Major
-					<select id="major" name='major' onchange="curriculumChange(this)">
-						<option value='Major'>Major</option>
-						<option value='Computer Science'>Computer Science</option>
-					</select>
+					<?php
+						echo 'Year';
+						echo '<select id="year" name="year" onchange="curriculumChange(this)">';
+						echo '<option value="Year">Year</option>';
+						$db = MyPDO::getDb();
+						$str = "SELECT DISTINCT `year` FROM `curriculum`";
+						$str .= "ORDER BY `year` DESC";
+						$query = $db->prepare($str);
+						$query->execute();
+						$result = $query->fetchALL(PDO::FETCH_ASSOC);
+						foreach ($result as $row) {
+							echo "<option value='".$row['year']."'>".$row['year']."</option>";
+						}
+						echo '</select>Major';
+						echo '<select id="major" name="major" onchange="curriculumChange(this)">';
+						echo '<option value="Major">Major</option>';
+						$db = MyPDO::getDb();
+						$str = "SELECT DISTINCT `major` FROM `majors`";
+						$str .= "ORDER BY `major` ASC";
+						$query = $db->prepare($str);
+						$query->execute();
+						$result = $query->fetchALL(PDO::FETCH_ASSOC);
+						foreach ($result as $row) {
+							echo "<option value='".$row['major']."'>".$row['major']."</option>";
+						}
+						echo '</select>';
+					?>
 				</form>
 				
 			</div>
@@ -68,7 +84,6 @@ include('php/header.php');
 					</div>
 				</div>
 				<div id="flow" class="tab-pane">
-					Choose curriculum year first
 				</div>
 			</div>
 		</div>

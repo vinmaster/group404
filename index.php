@@ -12,7 +12,7 @@ function __autoload($classname) {
 // Check to see if user is already logged in
 if (Auth::isLoggedIn()) {
   // Direct to dashboard
-  header( 'Location: dashboard.php' );
+  header( 'Location: classTab.php' );
 }
 
 session_start();
@@ -35,7 +35,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
     // echo '<a href="dashboard.php">Go to dashboard</a>';
   } else {
     printf("<h1>Access Denied</h1>");
-    exit();
+	exit();
   }
   header( 'Location: dashboard.php' );
   // printf('cookie: '.$_COOKIE['login'].'<br>');
@@ -66,9 +66,12 @@ else {
       body {
         padding-top: 40px;
         padding-bottom: 40px;
-        background-color: #f5f5f5;
+        background-color: #999966;
+		background-image:url('logo.png');
+		background-repeat:repeat-x;
+		background-attachment:fixed;
+		background-position:left;
       }
-
       .form-signin {
         max-width: 300px;
         padding: 19px 29px 29px;
@@ -104,10 +107,12 @@ else {
 
   </head>
 
-  <body>
-
+  <body> 
+  <div class="well">
+	<h1><center><strong>KSU Academic Success Planner</strong></center></h1>
+  </div>
     <div class="container">
-
+	<p></p>
       <form class="form-signin" method="post" action="index.php">
         <h2 class="form-signin-heading">Please sign in</h2>
         <input type="text" name="login" class="input-block-level" placeholder="Username">
@@ -115,11 +120,11 @@ else {
         <label class="checkbox">
           <input type="checkbox" name="remember_me" value="remember-me"> Remember me
         </label>
-        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+        <center><button class="btn btn-large btn-primary"  type="submit">Sign in</button></center>
       </form>
-      <div align="center">
-        <img border="0" src="http://www.operatorchan.org/404/404.jpg" alt="404 Not Found" width="640" height="427">
-      </div>
+	 <p>
+		<small>(c) 2013</small>
+	</p>
     </div> <!-- /container -->
 
   </body>

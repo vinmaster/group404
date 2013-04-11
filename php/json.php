@@ -47,9 +47,26 @@ if (isset($_POST['request'])) {//isset($_POST['login']) AND
 				if ($_POST['list'] == "ID") {
 					header('HTTP/1.0 400 Bad Request');
 				}
-				include('../classes/StudentList.php');
-				$studentTable = new StudentList();
-				$data = $studentTable->toJSON();
+				// include('../classes/StudentList.php');
+				// $studentTable = new StudentList();
+				// $data = $studentTable->toJSON();
+				$list = $_POST['list'];
+
+				include_once("../classes/MyPDO.php");
+				$db = MyPDO::getDb();
+				$str = "SELECT * FROM `student` WHERE `list_id` = $list";
+				$query = $db->prepare($str);
+				$query->execute();
+				$result = $query->fetchALL(PDO::FETCH_ASSOC);
+				$json = array();
+				foreach ($result as $row) {
+					$temp = array();
+					foreach ($row as $key => $col) {
+						$temp[$key] = $col;
+					}
+					array_push($json, $temp);
+				}
+				echo json_encode($json);
 
 				// display data on this page for ajax to fetch
 				echo $data;
@@ -59,7 +76,6 @@ if (isset($_POST['request'])) {//isset($_POST['login']) AND
 				$str = "SELECT list_id FROM `student`";
 				$str .= "GROUP BY list_id ";
 				$query = $db->prepare($str);
-				$query->bindParam(':major', $major);
 				$query->execute();
 				$result = $query->fetchALL(PDO::FETCH_ASSOC);
 				$json = array();
@@ -68,6 +84,44 @@ if (isset($_POST['request'])) {//isset($_POST['login']) AND
 				}
 				echo json_encode($json);
 			}
+		} else if ($request === 'studentStats') {
+			$list = $_POST['list'];
+			include_once("../classes/MyPDO.php");
+			$db = MyPDO::getDb();
+			$str = "SELECT * FROM `student` WHERE `list_id` = $list ";
+			$query = $db->prepare($str);
+			$query->execute();
+			$result = $query->fetchALL(PDO::FETCH_ASSOC);
+			$totalStudents = 0;
+			$totalUnits = 0;
+			$totalRemaining = 0;
+			$avgRemaining = 0;
+			$avgTaken = 0;
+			$maxUnits = 0;
+			$minUnits = 999;
+			$grad = 0;
+			$under = 0;
+			foreach ($result as $row) {
+				$units= $row['units'];
+				$totalStudents += 1;
+				$totalUnits += $units;
+				if ($units > $maxUnits) {
+					$maxUnits = $units;
+				}
+				if ($units < $minUnits) {
+					$minUnits = $units;
+				}
+				if ($units === 229) {
+					$grad += 1;
+				} else {
+					$under += 1;
+				}
+				$totalRemaining += (229 - $units);
+			}
+			$avgRemaining = $totalRemaining / $totalStudents;
+			$avgTaken = $totalUnits / $totalStudents;
+			$json = array('avgRemaining'=>$avgRemaining, 'avgTaken'=>$avgTaken, 'maxUnits'=>$maxUnits, 'minUnits'=>$minUnits, 'students'=>$under, 'grad'=>$grad);
+			echo json_encode($json);
 		} else {
 			header('HTTP/1.0 400 Bad Request');
 		}

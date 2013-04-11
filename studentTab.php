@@ -40,26 +40,56 @@ include('php/header.php');
 </script>
 <div>
 	<div class="well">
-			<div class="container">
-				<div class="row-fluid">
-					<div class="span3 offset2"><h1>Students<h1></div>
-					<div class="form-horizontal">
+		<div class="container">
+			<div class="row-fluid">
+				<div class="span3 offset1"><h1>Students<h1>
+				</div>
+				<div class="form-horizontal">
+					<label>Choose the student list to display:</label>
+					<div>
+						<select id="list" name='list'>
+							<option value='ID'>ID</option>
+						</select>
+						<button class='btn btn-primary' type="button" onclick="chooseStudentList()">Go</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<form>
-			<div class="container fluid">
-				<div class="row-fluid">
-					<div class="span10">
-						<div id="studentTableDiv">
-							<script>listStudents();</script>
-						</div>
+	</div>
+</div>
+
+<div class="container fluid">
+	<div class="row-fluid">
+		<div class="tabbable">
+			<ul class="nav nav-tabs" id="myTabs">
+				<li class="active">
+					<a data-toggle="tab" href="#table">Table</a>
+				</li>
+				<li class="">
+					<a data-toggle="tab" href="#pie1">Pie chart of student years</a>
+				</li>
+				<li class="">
+					<a data-toggle="tab" href="#stat">Student Statistics</a>
+				</li>
+			</ul>
+
+			<div class="tab-content">
+				<div id="table" class="tab-pane active">
+					<div class="span10" id="old_table_div">
+
+					</div>
+				</div>
+				<div id="pie1" class="tab-pane">
+					
+				</div>
+				<div id="stat" class="tab-pane">
+					
 				</div>
 			</div>
 		</div>
-		</form>
+	</div>
 </div>
+
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>

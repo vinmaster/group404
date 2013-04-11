@@ -28,7 +28,7 @@
 		$options = $_GET;
 
 
-		$factory = new StudentFactory("1", "2012", $options);
+		$factory = new StudentFactory("1", "2013", $options);
 		$factory->generateStudents();
 
 		echo "</table>";

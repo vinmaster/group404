@@ -12,6 +12,8 @@ class StudentFactory {
 	private $starting_id;
 	private $max_students;
 	private $class_limit;
+	private $dropout;
+	private $dropout_percent;
 
 	public function __construct($major_id, $year, $options) {
 		if (isset($options['max_students']) && strlen($options['max_students']) !== 0) {
@@ -24,6 +26,19 @@ class StudentFactory {
 		} else {
 			$this->class_limit = -1;
 		}
+		if (isset($options['dropout']) && strlen($options['dropout']) !== 0) {
+			$this->dropout_percent = $options['dropout'];
+		} else {
+			$this->dropout_percent = 0;
+		}
+		// echo $this->dropout_percent;
+		// echo "<br>";
+		// echo $this->max_students;
+		// echo "<br>";
+		// echo $this->dropout_percent;
+		// echo "<br>";
+		// echo $this->class_limit;
+		$this->dropout = 0;
 
 		$this->db = MyPDO::getDb();
 
@@ -38,7 +53,6 @@ class StudentFactory {
 
 		if (isset($options['starting_id']) && strlen($options['starting_id']) !== 0) {
 			$this->starting_id = $options['starting_id'];
-			echo "+++++++".$this->starting_id;
 		} else {
 			// Get the starting id for the first student
 			$str = "SELECT max(id) FROM `student`";
@@ -192,6 +206,12 @@ class StudentFactory {
 		$unvisited = $this->curriculum_tree->children;
 		$visited = array();
 		$iterator = reset($unvisited);
+
+		$doDrop = 0;
+		if ($this->dropout_percent > ($this->dropout / $this->max_students)*100) {
+			$doDrop = 1;
+			$this->dropout += 1;
+		}
 		
 		while ($iterator) {
 			$node = current($unvisited);
@@ -206,7 +226,9 @@ class StudentFactory {
 				}
 				$grade = round(rand($temp-50, $temp+50)/100);
 				$gp = $gp + ($node->units * $grade);
-				$this->addGrade($id, $letter_grades[$grade], $node);
+				if ($doDrop === 0) {
+					$this->addGrade($id, $letter_grades[$grade], $node);
+				}
 			}
 			foreach (current($unvisited)->children as $temp) {
 				if (!in_array($temp, $unvisited)) {
@@ -219,9 +241,14 @@ class StudentFactory {
 		$starting_term = $this->currentTerm($units);
 		$counting_term = $starting_term[0];
 		$counting_year = $starting_term[1];
-		$gpa = (round(($gp / $units) * 100)) / 100.0;
+		if ($units === 0) {
+			$gpa = 0;
+		} else {
+			$gpa = (round(($gp / $units) * 100)) / 100.0;
+		}
+
 		$s = new Student();
-		$s->setValue($id, $major, "s".$id, "Student ".$id, 0, $starting_term[1], $starting_term[0], 0, $gpa, $units, $list_id);
+		$s->setValue($id, $major, "s".$id, "Student ".$id, 0, $starting_term[1], $starting_term[0], $doDrop, $gpa, $units, $list_id);
 		return $s;
 	}
 

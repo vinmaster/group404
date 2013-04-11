@@ -12,12 +12,26 @@
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
   <script type="text/javascript" src="../js/bootstrap.min.js"></script>
-  <script src="http://d3js.org/d3.v2.js?2.9.1"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
   <?php
   if (isset($page_script)) {
     echo '<script type="text/javascript" src="../js/'.$page_script.'"></script>';
   }
   ?>
+  <style>
+
+  .link {
+    fill: none;
+    stroke: #666;
+    stroke-width: 1.5px;
+  }
+
+  .node circle {
+    fill: #ccc;
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
+  </style>
 </head>
 <body>
 
@@ -26,9 +40,9 @@
       <div class="row-fluid">
         <div class="span10 offset1">
           <div class="navbar-inner">
-            <a class="brand" href="#">group404</a>
+            <a class="brand" href="classTab.php">group404</a>
             <ul class="nav">
-              <li class="" id="dashboard-nav"><a href="dashboard.php">Class Schedule</a></li>
+              <li class="" id="classTab-nav"><a href="classTab.php">Class Schedule</a></li>
               <li class="" id="curriculum-nav"><a href="curriculumTab.php">Curriculum</a></li>
               <li class="" id="student-nav"><a href="studentTab.php">Student</a></li>
               <li class="dropdown">

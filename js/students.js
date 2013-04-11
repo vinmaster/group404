@@ -41,7 +41,7 @@ function chooseStudentList() {
 
 function generate() {
 	var getData = $("#gen_form").serialize();
-	console.log(getData);
+	console.log('getData: '+getData);
 	$.get("php/generate.php?"+getData).done(function(data) {
 		$("#gen_button").remove();
 		$("#generate").html(data);
